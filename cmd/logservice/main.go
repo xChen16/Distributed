@@ -13,6 +13,7 @@ func main() {
 	log.Run("./distributed.log")
 	host, port := "localhost", "4000"
 	serviceAddress := fmt.Sprintf("http.//%s:%s", host, port)
+
 	r := registry.Registration{
 		ServiceName:      registry.LogService,
 		ServiceURL:       serviceAddress,
@@ -27,9 +28,11 @@ func main() {
 		r,
 		log.RegisterHandlers,
 	)
+
 	if err != nil {
 		stlog.Fatalln(err)
 	}
 	<-ctx.Done()
+
 	fmt.Println("shutting log service.")
 }
