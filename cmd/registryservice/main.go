@@ -9,22 +9,28 @@ import (
 )
 
 func main() {
+	registry.SetupRegistryService()
 	http.Handle("/services", &registry.RegistryService{})
-	ctx, cannel := context.WithCancel(context.Background())
-	defer cannel()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	var srv http.Server
 	srv.Addr = registry.ServerPort
+
 	go func() {
 		log.Println(srv.ListenAndServe())
-		cannel()
+		cancel()
 	}()
+
 	go func() {
-		fmt.Println("Registry service start")
+		fmt.Println("Registry service started. Press any key to stop.")
 		var s string
 		fmt.Scanln(&s)
 		srv.Shutdown(ctx)
-		cannel()
+		cancel()
 	}()
+
 	<-ctx.Done()
-	fmt.Println("shutdown Registry Service")
+	fmt.Println("Shutting down registry service")
 }
