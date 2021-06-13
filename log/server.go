@@ -21,7 +21,7 @@ func (fl fileLog) Write(data []byte) (int, error) {
 	return f.Write(data)
 }
 func Run(destination string) {
-	log = stlog.New(fileLog(destination), "go", stlog.LstdFlags)
+	log = stlog.New(fileLog(destination), "go: ", stlog.LstdFlags)
 }
 func RegisterHandlers() {
 	http.HandleFunc("/log", func(w http.ResponseWriter, r *http.Request) {
